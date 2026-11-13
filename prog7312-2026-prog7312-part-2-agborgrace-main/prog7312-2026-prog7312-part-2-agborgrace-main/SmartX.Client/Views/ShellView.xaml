@@ -1,0 +1,82 @@
+<UserControl x:Class="SmartX.Client.Views.ShellView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:SmartX.Client.Controls">
+
+    <Grid Background="{StaticResource BgApp}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ===== top bar ===== -->
+        <Border Grid.Row="0" Background="{StaticResource BgDeep}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,0,1">
+            <Grid Margin="20,0">
+                <controls:SmartXLogo HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Ellipse x:Name="ApiDot" Width="9" Height="9" Fill="{StaticResource TextMute}" Margin="0,0,7,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="ApiStatusText" Text="Checking API..." Foreground="{StaticResource TextMute}" FontSize="12" VerticalAlignment="Center" Margin="0,0,24,0"/>
+                    <TextBlock x:Name="UserText" Foreground="{StaticResource TextMain}" FontSize="12" VerticalAlignment="Center" Margin="0,0,14,0"/>
+                    <Button Content="Sign out" Style="{StaticResource GhostButton}" Padding="14,6" FontSize="12" Click="SignOut_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="236"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ===== sidebar: the three architectural pillars ===== -->
+            <Border Grid.Column="0" Background="{StaticResource BgDeep}" BorderBrush="{StaticResource Line}" BorderThickness="0,0,1,0">
+                <DockPanel Margin="14,18,14,14">
+                    <TextBlock DockPanel.Dock="Top" Text="MODULES" Style="{StaticResource SectionTitle}" Margin="6,0,0,12"/>
+
+                    <!-- bottom: simulator status -->
+                    <Border DockPanel.Dock="Bottom" Style="{StaticResource Card}" Padding="12,10">
+                        <StackPanel>
+                            <TextBlock Text="DEVICE SIMULATOR" Style="{StaticResource SectionTitle}" FontSize="10"/>
+                            <TextBlock x:Name="SimText" Text="Stopped" Foreground="{StaticResource TextMain}" FontSize="12" Margin="0,5,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel>
+                        <!-- TAB 1: Part 1 -->
+                        <RadioButton x:Name="NavIngestion" GroupName="Modules" Style="{StaticResource NavItem}" IsChecked="True" Checked="Nav_Checked">
+                            <StackPanel>
+                                <TextBlock Text="Sensor Data Ingestion" TextWrapping="Wrap"/>
+                                <TextBlock Text="and Telemetry" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <!-- TAB 2: Part 2 -->
+                        <RadioButton x:Name="NavStream" GroupName="Modules" Style="{StaticResource NavItem}" Checked="Nav_Checked">
+                            <StackPanel>
+                                <TextBlock Text="Real-Time Command" TextWrapping="Wrap"/>
+                                <TextBlock Text="Stream and History" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </RadioButton>
+
+                        <!-- TAB 3: final PoE — visible but greyed out and not clickable -->
+                        <RadioButton x:Name="NavTopology" GroupName="Modules" Style="{StaticResource NavItem}" IsEnabled="False"
+                                     ToolTip="Network Topology and Mesh Routing is delivered in the final PoE."
+                                     ToolTipService.ShowOnDisabled="True">
+                            <StackPanel>
+                                <TextBlock Text="Network Topology" TextWrapping="Wrap"/>
+                                <TextBlock Text="and Mesh Routing" TextWrapping="Wrap"/>
+                                <Border Background="#2A3142" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Margin="0,6,0,0">
+                                    <TextBlock Text="FINAL PoE" FontSize="9" FontWeight="Bold" Foreground="{StaticResource TextMute}"/>
+                                </Border>
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- ===== the active module page (instances are kept alive, so no data is lost when switching) ===== -->
+            <ContentControl x:Name="ModuleHost" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</UserControl>

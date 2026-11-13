@@ -1,0 +1,13 @@
+# Smart-X sample device list — upload this on the "Sensor Data Ingestion" screen.
+# Format: MAC, Name, Category, Facility, Zone, SubZone [, Unit]
+# Category: Environmental | Power | Actuator      Unit (optional): %  °C  W
+AA:BB:CC:00:00:01, Moisture Sensor A, Environmental, Hydro Farm, Zone 1, Bed A, %
+AA:BB:CC:00:00:02, Moisture Sensor B, Environmental, Hydro Farm, Zone 1, Bed B, %
+AA:BB:CC:00:00:03, Greenhouse Temp 1, Environmental, Hydro Farm, Zone 2, Greenhouse, °C
+AA:BB:CC:00:00:04, Smart Meter 1, Power, Hydro Farm, Zone 1, Pump House, W
+AA:BB:CC:00:00:05, Smart Meter 2, Power, Hydro Farm, Zone 2, Cold Room, W
+AA:BB:CC:00:00:06, Pump A, Actuator, Hydro Farm, Zone 1, Bed A
+AA:BB:CC:00:00:07, Pump B, Actuator, Hydro Farm, Zone 1, Bed B
+AA:BB:CC:00:00:08, Relay Fan 1, Actuator, Hydro Farm, Zone 2, Greenhouse
+AA:BB:CC:00:00:09, Moisture Sensor C, Environmental, Hydro Farm, Zone 2, Bed C, %
+AA:BB:CC:00:00:0A, Valve 1, Actuator, Hydro Farm, Zone 2, Bed C

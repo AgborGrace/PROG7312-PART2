@@ -1,0 +1,169 @@
+<UserControl x:Class="SmartX.Client.Views.IngestionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:SmartX.Client.Controls"
+             xmlns:conv="clr-namespace:SmartX.Client.Converters">
+
+    <UserControl.Resources>
+        <conv:StatusToBrushConverter x:Key="StatusBrush"/>
+    </UserControl.Resources>
+
+    <Grid Margin="22">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- =================== LEFT: register a device =================== -->
+        <Border Grid.Column="0" Style="{StaticResource Card}">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="REGISTER A DEVICE" Style="{StaticResource SectionTitle}"/>
+                <TextBlock DockPanel.Dock="Top" Style="{StaticResource Muted}" Margin="0,3,0,2"
+                           Text="Add one sensor by hand, or import a whole list from a .txt file on the right."/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="0,0,8,0">
+                        <TextBlock Text="DEVICE NAME" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="DeviceNameBox" ToolTip="e.g. Pump A or Moisture Sensor B"/>
+
+                        <TextBlock Text="MAC ADDRESS / UNIQUE IDENTIFIER" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="MacAddressBox" ToolTip="Format: AA:BB:CC:DD:EE:01"/>
+
+                        <TextBlock Text="FACILITY" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="FacilityBox" ToolTip="e.g. Hydro Farm"/>
+
+                        <TextBlock Text="ZONE" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="ZoneBox" ToolTip="e.g. Zone 1"/>
+
+                        <TextBlock Text="SUB-ZONE / NODE ID" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="SubZoneBox" ToolTip="e.g. Bed B"/>
+
+                        <TextBlock Text="SENSOR CATEGORY" Style="{StaticResource FieldLabel}"/>
+                        <WrapPanel>
+                            <RadioButton x:Name="CatEnv" Content="Environmental" GroupName="RegCategory" Style="{StaticResource Chip}" IsChecked="True" Checked="Category_Checked"/>
+                            <RadioButton x:Name="CatPower" Content="Power" GroupName="RegCategory" Style="{StaticResource Chip}" Checked="Category_Checked"/>
+                            <RadioButton x:Name="CatActuator" Content="Actuator" GroupName="RegCategory" Style="{StaticResource Chip}" Checked="Category_Checked"/>
+                        </WrapPanel>
+
+                        <TextBlock Text="UNIT" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="UnitBox" Text="%" ToolTip="% (moisture), °C (temperature), W (power) or empty for actuators"/>
+
+                        <TextBlock Text="CONFIGURATION / LOG / PHOTO FILE (optional)" Style="{StaticResource FieldLabel}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="AttachmentBox" Grid.Column="0" IsReadOnly="True" Text="No file selected"/>
+                            <Button Grid.Column="2" Content="Browse" Style="{StaticResource SecondaryButton}" Click="BrowseAttachment_Click"/>
+                        </Grid>
+
+                        <Button x:Name="RegisterButton" Content="Register device" Style="{StaticResource PrimaryButton}" Margin="0,20,0,0" Padding="16,11" Click="Register_Click"/>
+                        <TextBlock x:Name="StatusText" Margin="0,12,0,0" TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMute}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <!-- =================== RIGHT =================== -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="14"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="14"/>
+                <RowDefinition Height="140"/>
+            </Grid.RowDefinitions>
+
+            <!-- import card + health card -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="250"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="IMPORT DEVICES FROM A .TXT FILE" Style="{StaticResource SectionTitle}"/>
+                        <TextBlock Style="{StaticResource Muted}" Margin="0,3,0,10"
+                                   Text="The file is read and parsed by the API: each valid line becomes a registered device and appears in the grid below and in the Command Stream. Line format:  MAC, Name, Category, Facility, Zone, SubZone [, Unit]"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="ImportButton" Content="Choose .txt file and import" Style="{StaticResource PrimaryButton}" Click="Import_Click"/>
+                            <TextBlock Text="Sample: SampleData/sample-devices.txt" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="14,0,0,0"/>
+                        </StackPanel>
+                        <TextBlock x:Name="ImportResultText" Margin="0,10,0,0" TextWrapping="Wrap" FontSize="12" Foreground="{StaticResource TextMute}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource Card}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="INGESTION HEALTH" Style="{StaticResource SectionTitle}" HorizontalAlignment="Center"/>
+                        <controls:HealthRing x:Name="Ring" Width="96" Height="96" Margin="0,8,0,0"/>
+                        <TextBlock x:Name="StreakText" Text="0 clean ingestion cycles" HorizontalAlignment="Center" Foreground="{StaticResource TextMute}" FontSize="11" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- devices grid -->
+            <Border Grid.Row="2" Style="{StaticResource Card}" Padding="0">
+                <DockPanel>
+                    <Grid DockPanel.Dock="Top" Margin="18,14,18,10">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="REGISTERED DEVICES" Style="{StaticResource SectionTitle}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="DeviceCountText" Style="{StaticResource Muted}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBox x:Name="ReadingValueBox" Width="90" Padding="8,6" ToolTip="Test reading value for the selected device (e.g. 42.5)"/>
+                            <Button x:Name="SendReadingButton" Content="Send test reading" Style="{StaticResource SecondaryButton}" Padding="12,7" Margin="8,0,0,0"
+                                    IsEnabled="False" Click="SendReading_Click"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid x:Name="DevicesGrid" Style="{StaticResource DarkGrid}" SelectionChanged="DevicesGrid_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="NAME" Binding="{Binding Name}" Width="1.2*"/>
+                            <DataGridTextColumn Header="MAC ADDRESS" Binding="{Binding Mac}" Width="1.3*"/>
+                            <DataGridTextColumn Header="CATEGORY" Binding="{Binding CategoryText}" Width="*"/>
+                            <DataGridTextColumn Header="LOCATION" Binding="{Binding Location}" Width="1.6*"/>
+                            <DataGridTextColumn Header="LATEST" Binding="{Binding LastValueText}" Width="0.8*"/>
+                            <DataGridTemplateColumn Header="STATUS" Width="1.1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StatusText}" FontWeight="SemiBold"
+                                                   Foreground="{Binding Status, Converter={StaticResource StatusBrush}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="FILE" Binding="{Binding AttachmentText}" Width="1.2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- activity feed -->
+            <Border Grid.Row="4" Style="{StaticResource Card}" Padding="14,10">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="ACTIVITY FEED" Style="{StaticResource SectionTitle}" Margin="0,0,0,6"/>
+                    <ListBox x:Name="ActivityFeed" Background="Transparent" BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Foreground="{StaticResource TextMain}" FontSize="12" TextWrapping="Wrap" Margin="0,2"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

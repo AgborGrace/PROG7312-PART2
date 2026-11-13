@@ -1,0 +1,12 @@
+<Window x:Class="SmartX.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Smart-X | IoT Mesh Gateway"
+        Height="780" Width="1280"
+        MinWidth="1000" MinHeight="660"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgDeep}"
+        FontFamily="Segoe UI">
+    <!-- The current screen (Landing -> Sign in -> Shell) is swapped into this host. -->
+    <ContentControl x:Name="RootHost"/>
+</Window>

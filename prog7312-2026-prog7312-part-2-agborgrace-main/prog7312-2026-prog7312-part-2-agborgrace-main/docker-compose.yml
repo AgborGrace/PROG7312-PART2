@@ -1,0 +1,16 @@
+# Runs the Smart-X API in a container on http://localhost:5177
+# (the WPF client is a Windows desktop app, so it always runs on the host and talks to this API).
+services:
+  smartx-api:
+    build:
+      context: ./SmartX.Api
+    ports:
+      - "5177:5177"
+    environment:
+      # Put your Firebase Web API key here (or in an .env file) so the API can verify sign-ins.
+      - Firebase__ApiKey=${FIREBASE_API_KEY:-PASTE_YOUR_FIREBASE_WEB_API_KEY_HERE}
+    volumes:
+      - smartx-uploads:/app/Uploads
+
+volumes:
+  smartx-uploads:

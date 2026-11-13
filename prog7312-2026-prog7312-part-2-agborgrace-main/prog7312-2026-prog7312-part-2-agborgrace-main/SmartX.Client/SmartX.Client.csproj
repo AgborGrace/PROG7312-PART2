@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- If your machine only has the .NET 8 or .NET 9 SDK installed, change this to net8.0-windows / net9.0-windows. -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <!-- Disabled on purpose: every file lists its own 'using' lines, so nothing depends on hidden global usings
+         (WPF projects do not get System.IO / System.Net.Http / System.Threading automatically). -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>SmartX.Client</RootNamespace>
+    <AssemblyName>SmartX.Client</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Runtime settings (Firebase Web API key + API address) are copied next to the .exe. -->
+    <None Update="client-settings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

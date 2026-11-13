@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- If your machine only has the .NET 8 or .NET 9 SDK installed, change this to net8.0 / net9.0.
+         Nothing else needs to change (this project uses no third-party NuGet packages). -->
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>SmartX.Api</RootNamespace>
+  </PropertyGroup>
+
+</Project>

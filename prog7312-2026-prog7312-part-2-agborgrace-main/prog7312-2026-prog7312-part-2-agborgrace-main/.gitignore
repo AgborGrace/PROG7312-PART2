@@ -1,0 +1,12 @@
+## .NET
+bin/
+obj/
+*.user
+.vs/
+
+## Files uploaded to the API at runtime
+SmartX.Api/Uploads/
+
+## OS
+.DS_Store
+Thumbs.db

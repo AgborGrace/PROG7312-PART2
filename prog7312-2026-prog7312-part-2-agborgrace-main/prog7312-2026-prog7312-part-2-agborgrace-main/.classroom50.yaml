@@ -1,0 +1,7 @@
+schema: "classroom50/repo-config/v1"
+classroom: "prog7312-2026"
+assignment: "prog7312-part-2"
+owner:
+  username: "AgborGrace"
+  id: 108527343
+  accepted_at: "2026-09-20T02:31:02Z"
